@@ -33,3 +33,33 @@ class Vehiculos:
             if vehiculo.dni == dni:
                 return vehiculo
         return None
+    
+    @staticmethod
+    def crear(color, ruedas):
+        vehiculo = Vehiculo(color, ruedas)
+        Vehiculos.vehiculos.append(vehiculo)
+        Vehiculos.guardar()
+        return vehiculo
+    
+    @staticmethod
+    def modificar(color, ruedas):
+        for indice, vehiculo in enumerate(Vehiculos.vehiculos):
+            if vehiculo.color == color:
+                Vehiculos.vehiculos[indice].ruedas = ruedas
+                Vehiculos.guardar() 
+                return vehiculo
+            
+    @staticmethod
+    def borrar(color):
+        for indice, vehiculo in enumerate(Vehiculos.vehiculos):
+            if vehiculo.color == color:
+                del Vehiculos.vehiculos[indice]
+                Vehiculos.guardar()
+                return vehiculo
+            
+    @staticmethod
+    def guardar():
+        with open(config.DATABASE_PATH, 'w', newline='\n') as fichero:
+            writer = csv.writer(fichero, delimiter=';')
+            for vehiculo in Vehiculos.vehiculos:
+                writer.writerow([vehiculo.color, vehiculo.ruedas])
