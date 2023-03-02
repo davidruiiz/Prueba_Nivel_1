@@ -1,20 +1,16 @@
+
+#Creo una clase Vehiculo con el constructor de la clase y los atributos color y ruedas
+
 class Vehiculo():
 
-    def __init__(self, color, ruedas):
+    def __init__(self, color: str, ruedas: int):
         self.color = color
         self.ruedas = ruedas
+
+#Creo un método que me muestre el color y el numero de ruedas del coche
+
     def __str__(self):
         return "color {}, {} ruedas".format( self.color, self.ruedas )
     
-class Coche(Vehiculo):
+#Creo una clase Coche que hereda de la clase Vehiculo y que tiene como atributos velocidad y cilindrada
 
-    def __init__(self, color, ruedas, velocidad, cilindrada):
-        Vehiculo.__init__(self, color, ruedas)
-        self.velocidad = velocidad
-        self.cilindrada = cilindrada
-
-    def __str__(self):
-        return Vehiculo.__str__(self) + ", {} km/h, {} cc".format( self.velocidad, self.cilindrada )
-    
-c=Coche("rojo", 4, 150, 1300)
-print(c)
