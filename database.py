@@ -26,3 +26,10 @@ class Vehiculos:
         for color, ruedas in reader:
             vehiculo = Vehiculo(color, ruedas)
             vehiculos.append(vehiculo)
+
+    @staticmethod
+    def buscar(dni):
+        for vehiculo in Vehiculos.vehiculos:
+            if vehiculo.dni == dni:
+                return vehiculo
+        return None

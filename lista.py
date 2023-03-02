@@ -24,4 +24,4 @@ camioneta = Camioneta("blanco", 4, 120, 2000, 500)
 vehiculos.append(camioneta)
 
 # Create a motorcycle object
-motocicleta =  
+motocicleta = Motocicleta() 
