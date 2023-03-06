@@ -1,8 +1,9 @@
 from coche import Coche
+from bicicleta import Bicicleta
 
-#Creo una clase Camioneta que hereda de la clase Coche y que tiene como atributo carga
+# Creo una clase Quad que hereda de las clases Coche y Bicicleta y que tiene como atributo carga
 
-class Camioneta(Coche):
+class Quad(Coche, Bicicleta):
     def __init__(self, bastidor: str, color: str, ruedas: int, velocidad: int, cilindrada: int, carga: int) -> None:
         # Llamamos a la clase padre (Coche) para que ejecute su constructor
         super().__init__(bastidor, color, ruedas, velocidad, cilindrada)
@@ -11,7 +12,7 @@ class Camioneta(Coche):
 
     def __str__(self) -> str:
         # Llamamos a la clase padre para que nos devuelva su representación en formato string
-        return f"Camioneta: {self.bastidor}, {self.color}, {self.ruedas}, {self.velocidad}, {self.cilindrada}, {self.carga}"
+        return f"Quad: {self.bastidor}, {self.color}, {self.ruedas}, {self.velocidad}, {self.cilindrada}, {self.carga}"
 
     def to_dict(self):
         # Llamamos a la clase padre para que nos devuelva su representación en forma de diccionario

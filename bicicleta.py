@@ -1,18 +1,23 @@
 from  database import Vehiculo
 
-# Esta clase hereda de la clase Vehiculo
-class Bicicleta(Vehiculo):
-    
-        # El constructor de la clase Bicicleta recibe los parámetros del constructor
-        # de la clase padre Vehiculo, y los parámetros propios de la clase Bicicleta
-        def __init__(self, color: str, ruedas: int, tipo: str):
-            # Se invoca al constructor de la clase padre Vehiculo
-            Vehiculo.__init__(self, color, ruedas)
-            # Se inicializa el atributo propio de la clase Bicicleta
-            self.tipo = tipo
-    
-        # Se redefine el método __str__ de la clase padre Vehiculo
-        def __str__(self):
-            # Se invoca al método __str__ de la clase padre Vehiculo
-            return Vehiculo.__str__(self) + ", {}".format( self.tipo )
+# Creo una clase Bicicleta que hereda de la clase Vehiculo y que tiene como atributo tipo (urbana o montaña)
 
+class  Bicicleta ( Vehiculo ):
+        def   __init__ ( self , bastidor: str , color: str , ruedas: int , tipo: str ) -> None :
+            # Llamamos a la clase padre (Vehiculo) para que ejecute su constructor
+            super () . __init__ ( bastidor , color , ruedas )
+            # Creamos nuestro atributo propio
+            self.tipo  =  tipo
+    
+        def   __str__ ( self ):
+            # Llamamos a la clase padre para que nos devuelva su representación en formato string
+            return f"Bicicleta: { self . bastidor } , { self . color } , { self . ruedas } , { self . tipo }"
+    
+        def  to_dict ( self ):
+            # Llamamos a la clase padre para que nos devuelva su representación en forma de diccionario
+            return {
+                "bastidor" :  self . bastidor ,
+                "color" :  self . color ,
+                "ruedas" :  self . ruedas ,
+                "tipo" :  self . tipo 
+            }

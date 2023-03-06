@@ -31,8 +31,8 @@ class CreateVehicleWindow(Toplevel, CenterWidgetMixin):
         frame.pack(padx=20, pady=10)
 
         Label(frame, text="Número de Bastidor (2 ints y 1 upper char)").grid(row=0, column=0)
-        Label(frame, text="Color (de 1 a 30 chars)").grid(row=0, column=1)
-        Label(frame, text="Ruedas").grid(row=0, column=2)
+        Label(frame, text="Color").grid(row=0, column=1)
+        Label(frame, text="Número de Ruedas").grid(row=0, column=2)
 
         bastidor = Entry(frame)
         bastidor.grid(row=1, column=0)
@@ -93,8 +93,8 @@ class EditVehicleWindow(Toplevel, CenterWidgetMixin):
         frame.pack(padx=20, pady=10)
 
         Label(frame, text="Número de Bastidor").grid(row=0, column=0)
-        Label(frame, text="Color (de 1 a 30 chars)").grid(row=0, column=1)
-        Label(frame, text="Ruedas").grid(row=0, column=2)
+        Label(frame, text="Color").grid(row=0, column=1)
+        Label(frame, text="Número de Ruedas").grid(row=0, column=2)
 
         bastidor = Entry(frame)
         bastidor.grid(row=1, column=0)
@@ -157,16 +157,16 @@ class MainWindow(Tk, CenterWidgetMixin):
         frame.pack()
 
         treeview = ttk.Treeview(frame)
-        treeview['columns'] = ('Número de Bastidor', 'Color', 'Ruedas')
+        treeview['columns'] = ('Número de Bastidor', 'Color', 'Número de Ruedas')
 
         treeview.column("#0", width=0, stretch=NO)
         treeview.column("Número de Bastidor", anchor=CENTER)
         treeview.column("Color", anchor=CENTER)
-        treeview.column("Ruedas", anchor=CENTER)
+        treeview.column("Número de Ruedas", anchor=CENTER)
 
         treeview.heading("Número de Bastidor", text="Número de Bastidor", anchor=CENTER)
         treeview.heading("Color", text="Color", anchor=CENTER)
-        treeview.heading("Ruedas", text="Ruedas", anchor=CENTER)
+        treeview.heading("Número de Ruedas", text="Número de Ruedas", anchor=CENTER)
 
         scrollbar = Scrollbar(frame)
         scrollbar.pack(side=RIGHT, fill=Y)
