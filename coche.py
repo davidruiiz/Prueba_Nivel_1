@@ -1,4 +1,4 @@
-from vehiculo import Vehiculo
+from database import Vehiculo
 
 #Creo una clase Coche que hereda de la clase Vehiculo y que tiene como atributos velocidad y cilindrada
 

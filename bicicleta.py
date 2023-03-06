@@ -1,4 +1,4 @@
-from  vehiculo import Vehiculo
+from  database import Vehiculo
 
 # Esta clase hereda de la clase Vehiculo
 class Bicicleta(Vehiculo):
