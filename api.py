@@ -8,61 +8,61 @@ import helpers
 headers = {"content-type": "charset=utf-8"}
 
 
-class ModeloCliente(BaseModel):
-    dni: constr(min_length=3, max_length=3)
-    nombre: constr(min_length=2, max_length=30)
-    apellido: constr(min_length=2, max_length=30)
+class ModeloVehiculo(BaseModel):
+    color: constr(min_length=3, max_length=3)
+    ruedas: constr(min_length=2, max_length=30)
+    
 
 
-class ModeloCrearCliente(ModeloCliente):
-    @validator("dni")
-    def validar_dni(cls, dni):
-        if not helpers.dni_valido(dni, db.Clientes.lista):
-            raise ValueError("Cliente ya existente o DNI incorrecto")
-        return dni
+class ModeloCrearVehiculo(ModeloVehiculo):
+    @validator("color")
+    def validar_dni(cls, color):
+        if not helpers.dni_valido(color, db.Vehiculos.lista):
+            raise ValueError("Vehículo ya existente o número de bastidor incorrecto")
+        return color
 
 
 app = FastAPI(
-    title="API del Gestor de clientes",
-    description="Ofrece diferentes funciones para gestionar los clientes.")
+    title="API del Gestor de vehículos",
+    description="Ofrece diferentes funciones para gestionar los vehículos.")
 
 
-@app.get("/clientes/", tags=["Clientes"])
-async def clientes():
-    content = [cliente.to_dict() for cliente in db.Clientes.lista]
+@app.get("/vehículos/", tags=["Vehículos"])
+async def vehiculos():
+    content = [vehiculo.to_dict() for vehiculo in db.Vehiculos.lista]
     return JSONResponse(content=content, headers=headers)
 
 
-@app.get("/clientes/buscar/{dni}/", tags=["Clientes"])
-async def clientes_buscar(dni: str):
-    cliente = db.Clientes.buscar(dni=dni)
-    if not cliente:
-        raise HTTPException(status_code=404, detail="Cliente no encontrado")
-    return JSONResponse(content=cliente.to_dict(), headers=headers)
+@app.get("/vehiculos/buscar/{color}/", tags=["Vehiculos"])
+async def vehiculos_buscar(color: str):
+    vehiculo = db.Vehiculos.buscar(color=color)
+    if not vehiculo:
+        raise HTTPException(status_code=404, detail="Vehiculo no encontrado")
+    return JSONResponse(content=vehiculo.to_dict(), headers=headers)
 
 
-@app.post("/clientes/crear/", tags=["Clientes"])
-async def clientes_crear(datos: ModeloCrearCliente):
-    cliente = db.Clientes.crear(datos.dni, datos.nombre, datos.apellido)
-    if cliente:
-        return JSONResponse(content=cliente.to_dict(), headers=headers)
+@app.post("/vehiculos/crear/", tags=["Vehiculos"])
+async def vehiculos_crear(datos: ModeloCrearVehiculo):
+    vehiculo = db.Vehiculos.crear(datos.color, datos.ruedas)
+    if vehiculo:
+        return JSONResponse(content=vehiculo.to_dict(), headers=headers)
     raise HTTPException(status_code=404)
 
 
-@ app.put("/clientes/actualizar/", tags=["Clientes"])
-async def clientes_actualizar(datos: ModeloCliente):
-    if db.Clientes.buscar(datos.dni):
-        cliente = db.Clientes.modificar(datos.dni, datos.nombre, datos.apellido)
-        if cliente:
-            return JSONResponse(content=cliente.to_dict(), headers=headers)
+@ app.put("/vehiculos/actualizar/", tags=["Clientes"])
+async def clientes_actualizar(datos: ModeloVehiculo):
+    if db.Vehiculos.buscar(datos.color):
+        vehiculo = db.Vehiculos.modificar(datos.color, datos.ruedas)
+        if vehiculo:
+            return JSONResponse(content=vehiculo.to_dict(), headers=headers)
     raise HTTPException(status_code=404)
 
 
-@app.delete("/clientes/borrar/{dni}/", tags=["Clientes"])
-async def clientes_borrar(dni: str):
-    if db.Clientes.buscar(dni=dni):
-        cliente = db.Clientes.borrar(dni=dni)
-        return JSONResponse(content=cliente.to_dict(), headers=headers)
+@app.delete("/vehiculos/borrar/{color}/", tags=["Clientes"])
+async def vehiculos_borrar(color: str):
+    if db.Vehiculos.buscar(color=color):
+        vehiculo = db.Vehiculos.borrar(color=color)
+        return JSONResponse(content=vehiculo.to_dict(), headers=headers)
     raise HTTPException(status_code=404)
 
 print("Servidor de la API...")
