@@ -9,17 +9,17 @@ headers = {"content-type": "charset=utf-8"}
 
 
 class ModeloVehiculo(BaseModel):
-    color: constr(min_length=3, max_length=3)
+    bastidor: constr(min_length=3, max_length=3)
+    color: constr(min_length=2, max_length=30)
     ruedas: constr(min_length=2, max_length=30)
-    
 
 
 class ModeloCrearVehiculo(ModeloVehiculo):
-    @validator("color")
-    def validar_dni(cls, color):
-        if not helpers.dni_valido(color, db.Vehiculos.lista):
-            raise ValueError("Vehículo ya existente o número de bastidor incorrecto")
-        return color
+    @validator("bastidor")
+    def validar_bastidor(cls, bastidor):
+        if not helpers.bastidor_valido(bastidor, db.Vehiculos.lista):
+            raise ValueError("Vehículo ya existente o DNI incorrecto")
+        return bastidor
 
 
 app = FastAPI(
@@ -33,35 +33,35 @@ async def vehiculos():
     return JSONResponse(content=content, headers=headers)
 
 
-@app.get("/vehiculos/buscar/{color}/", tags=["Vehiculos"])
-async def vehiculos_buscar(color: str):
-    vehiculo = db.Vehiculos.buscar(color=color)
+@app.get("/vehiculos/buscar/{bastidor}/", tags=["Vehículos"])
+async def vehiculos_buscar(bastidor: str):
+    vehiculo = db.Vehiculos.buscar(bastidor=bastidor)
     if not vehiculo:
-        raise HTTPException(status_code=404, detail="Vehiculo no encontrado")
+        raise HTTPException(status_code=404, detail="Vehículo no encontrado")
     return JSONResponse(content=vehiculo.to_dict(), headers=headers)
 
 
-@app.post("/vehiculos/crear/", tags=["Vehiculos"])
+@app.post("/vehiculos/crear/", tags=["Vehículos"])
 async def vehiculos_crear(datos: ModeloCrearVehiculo):
-    vehiculo = db.Vehiculos.crear(datos.color, datos.ruedas)
+    vehiculo = db.Vehiculos.crear(datos.bastidor, datos.color, datos.ruedas)
     if vehiculo:
         return JSONResponse(content=vehiculo.to_dict(), headers=headers)
     raise HTTPException(status_code=404)
 
 
-@ app.put("/vehiculos/actualizar/", tags=["Clientes"])
-async def clientes_actualizar(datos: ModeloVehiculo):
-    if db.Vehiculos.buscar(datos.color):
-        vehiculo = db.Vehiculos.modificar(datos.color, datos.ruedas)
+@ app.put("/vehiculos/actualizar/", tags=["Vehículos"])
+async def vehiculos_actualizar(datos: ModeloVehiculo):
+    if db.Vehiculos.buscar(datos.bastidor):
+        vehiculo = db.Vehiculos.modificar(datos.bastidor, datos.color, datos.ruedas)
         if vehiculo:
             return JSONResponse(content=vehiculo.to_dict(), headers=headers)
     raise HTTPException(status_code=404)
 
 
-@app.delete("/vehiculos/borrar/{color}/", tags=["Clientes"])
-async def vehiculos_borrar(color: str):
-    if db.Vehiculos.buscar(color=color):
-        vehiculo = db.Vehiculos.borrar(color=color)
+@app.delete("/vehiculos/borrar/{bastidor}/", tags=["Vehículos"])
+async def vehiculos_borrar(bastidor: str):
+    if db.Vehiculos.buscar(bastidor=bastidor):
+        vehiculo = db.Vehiculos.borrar(bastidor=bastidor)
         return JSONResponse(content=vehiculo.to_dict(), headers=headers)
     raise HTTPException(status_code=404)
 

@@ -17,7 +17,7 @@ class CenterWidgetMixin:
         self.geometry(f"{w}x{h}+{x}+{y}")
 
 
-class CreateClientWindow(Toplevel, CenterWidgetMixin):
+class CreateVehicleWindow(Toplevel, CenterWidgetMixin):
     def __init__(self, parent):
         super().__init__(parent)
         self.title("Crear cliente")
@@ -30,19 +30,19 @@ class CreateClientWindow(Toplevel, CenterWidgetMixin):
         frame = Frame(self)
         frame.pack(padx=20, pady=10)
 
-        Label(frame, text="Número de bastidor (2 ints y 1 upper char)").grid(row=0, column=0)
+        Label(frame, text="Número de Bastidor (2 ints y 1 upper char)").grid(row=0, column=0)
         Label(frame, text="Color (de 2 a 30 chars)").grid(row=0, column=1)
-        Label(frame, text="Ruedas(de 2 a 30 chars)").grid(row=0, column=2)
+        Label(frame, text="Ruedas (de 2 a 30 chars)").grid(row=0, column=2)
 
-        dni = Entry(frame)
-        dni.grid(row=1, column=0)
-        dni.bind("<KeyRelease>", lambda event: self.validate(event, 0))
-        nombre = Entry(frame)
-        nombre.grid(row=1, column=1)
-        nombre.bind("<KeyRelease>", lambda event: self.validate(event, 1))
-        apellido = Entry(frame)
-        apellido.grid(row=1, column=2)
-        apellido.bind("<KeyRelease>", lambda event: self.validate(event, 2))
+        bastidor = Entry(frame)
+        bastidor.grid(row=1, column=0)
+        bastidor.bind("<KeyRelease>", lambda event: self.validate(event, 0))
+        color = Entry(frame)
+        color.grid(row=1, column=1)
+        color.bind("<KeyRelease>", lambda event: self.validate(event, 1))
+        ruedas = Entry(frame)
+        ruedas.grid(row=1, column=2)
+        ruedas.bind("<KeyRelease>", lambda event: self.validate(event, 2))
 
         frame = Frame(self)
         frame.pack(pady=10)
@@ -54,15 +54,15 @@ class CreateClientWindow(Toplevel, CenterWidgetMixin):
 
         self.validaciones = [0, 0, 0]
         self.crear = crear
-        self.dni = dni
-        self.nombre = nombre
-        self.apellido = apellido
+        self.bastidor = bastidor
+        self.color = color
+        self.ruedas = ruedas
 
-    def create_client(self):
+    def create_vehicle(self):
         self.master.treeview.insert(
-            parent='', index='end', iid=self.dni.get(),
-            values=(self.dni.get(), self.nombre.get(), self.apellido.get()))
-        db.Clientes.crear(self.dni.get(), self.nombre.get(), self.apellido.get())
+            parent='', index='end', iid=self.bastidor.get(),
+            values=(self.bastidor.get(), self.color.get(), self.ruedas.get()))
+        db.Vehiculos.crear(self.bastidor.get(), self.color.get(), self.ruedas.get())
         self.close()
 
     def close(self):
@@ -71,7 +71,7 @@ class CreateClientWindow(Toplevel, CenterWidgetMixin):
 
     def validate(self, event, index):
         valor = event.widget.get()
-        valido = helpers.dni_valido(valor, db.Clientes.lista) if index == 0 \
+        valido = helpers.bastidor_valido(valor, db.Vehiculos.lista) if index == 0 \
             else (valor.isalpha() and len(valor) >= 2 and len(valor) <= 30)
         event.widget.configure({"bg": "Green" if valido else "Red"})
         # Cambiar el estado del botón en base a las validaciones
@@ -79,7 +79,7 @@ class CreateClientWindow(Toplevel, CenterWidgetMixin):
         self.crear.config(state=NORMAL if self.validaciones == [1, 1, 1] else DISABLED)
 
 
-class EditClientWindow(Toplevel, CenterWidgetMixin):
+class EditVehicleWindow(Toplevel, CenterWidgetMixin):
     def __init__(self, parent):
         super().__init__(parent)
         self.title("Actualizar cliente")
@@ -92,25 +92,25 @@ class EditClientWindow(Toplevel, CenterWidgetMixin):
         frame = Frame(self)
         frame.pack(padx=20, pady=10)
 
-        Label(frame, text="DNI (no editable)").grid(row=0, column=0)
-        Label(frame, text="Nombre (de 2 a 30 chars)").grid(row=0, column=1)
-        Label(frame, text="Apellido (de 2 a 30 chars)").grid(row=0, column=2)
+        Label(frame, text="Número de Bastidor").grid(row=0, column=0)
+        Label(frame, text="Color (de 2 a 30 chars)").grid(row=0, column=1)
+        Label(frame, text="Ruedas (de 2 a 30 chars)").grid(row=0, column=2)
 
-        dni = Entry(frame)
-        dni.grid(row=1, column=0)
-        nombre = Entry(frame)
-        nombre.grid(row=1, column=1)
-        nombre.bind("<KeyRelease>", lambda event: self.validate(event, 0))
-        apellido = Entry(frame)
-        apellido.grid(row=1, column=2)
-        apellido.bind("<KeyRelease>", lambda event: self.validate(event, 1))
+        bastidor = Entry(frame)
+        bastidor.grid(row=1, column=0)
+        color = Entry(frame)
+        color.grid(row=1, column=1)
+        color.bind("<KeyRelease>", lambda event: self.validate(event, 0))
+        ruedas = Entry(frame)
+        ruedas.grid(row=1, column=2)
+        ruedas.bind("<KeyRelease>", lambda event: self.validate(event, 1))
 
         cliente = self.master.treeview.focus()
         campos = self.master.treeview.item(cliente, 'values')
-        dni.insert(0, campos[0])
-        dni.config(state=DISABLED)
-        nombre.insert(0, campos[1])
-        apellido.insert(0, campos[2])
+        bastidor.insert(0, campos[0])
+        bastidor.config(state=DISABLED)
+        color.insert(0, campos[1])
+        ruedas.insert(0, campos[2])
 
         frame = Frame(self)
         frame.pack(pady=10)
@@ -121,15 +121,15 @@ class EditClientWindow(Toplevel, CenterWidgetMixin):
 
         self.validaciones = [1, 1]
         self.actualizar = actualizar
-        self.dni = dni
-        self.nombre = nombre
-        self.apellido = apellido
+        self.bastidor = bastidor
+        self.color = color
+        self.ruedas = ruedas
 
-    def edit_client(self):
-        cliente = self.master.treeview.focus()
-        self.master.treeview.item(cliente, values=(
-            self.dni.get(), self.nombre.get(), self.apellido.get()))
-        db.Clientes.modificar(self.dni.get(), self.nombre.get(), self.apellido.get())
+    def edit_vehicle(self):
+        vehiculo = self.master.treeview.focus()
+        self.master.treeview.item(vehiculo, values=(
+            self.bastidor.get(), self.color.get(), self.ruedas.get()))
+        db.Vehiculos.modificar(self.bastidor.get(), self.color.get(), self.ruedas.get())
         self.close()
 
     def close(self):
@@ -148,7 +148,7 @@ class EditClientWindow(Toplevel, CenterWidgetMixin):
 class MainWindow(Tk, CenterWidgetMixin):
     def __init__(self):
         super().__init__()
-        self.title("Gestor de clientes")
+        self.title("Gestor de vehículos")
         self.build()
         self.center()
 
@@ -157,25 +157,25 @@ class MainWindow(Tk, CenterWidgetMixin):
         frame.pack()
 
         treeview = ttk.Treeview(frame)
-        treeview['columns'] = ('DNI', 'Nombre', 'Apellido')
+        treeview['columns'] = ('Número de Bastidor', 'Color', 'Ruedas')
 
         treeview.column("#0", width=0, stretch=NO)
-        treeview.column("DNI", anchor=CENTER)
-        treeview.column("Nombre", anchor=CENTER)
-        treeview.column("Apellido", anchor=CENTER)
+        treeview.column("Número de Bastidor", anchor=CENTER)
+        treeview.column("Color", anchor=CENTER)
+        treeview.column("Ruedas", anchor=CENTER)
 
-        treeview.heading("DNI", text="DNI", anchor=CENTER)
-        treeview.heading("Nombre", text="Nombre", anchor=CENTER)
-        treeview.heading("Apellido", text="Apellido", anchor=CENTER)
+        treeview.heading("Número de Bastidor", text="Número de Bastidor", anchor=CENTER)
+        treeview.heading("Color", text="Color", anchor=CENTER)
+        treeview.heading("Ruedas", text="Ruedas", anchor=CENTER)
 
         scrollbar = Scrollbar(frame)
         scrollbar.pack(side=RIGHT, fill=Y)
         treeview['yscrollcommand'] = scrollbar.set
 
-        for cliente in db.Clientes.lista:
+        for vehiculo in db.Vehiculos.lista:
             treeview.insert(
-                parent='', index='end', iid=cliente.dni,
-                values=(cliente.dni, cliente.nombre, cliente.apellido))
+                parent='', index='end', iid=vehiculo.bastidor,
+                values=(vehiculo.bastidor, vehiculo.color, vehiculo.ruedas))
 
         treeview.pack()
 
@@ -189,23 +189,23 @@ class MainWindow(Tk, CenterWidgetMixin):
         self.treeview = treeview
 
     def delete(self):
-        cliente = self.treeview.focus()
-        if cliente:
-            campos = self.treeview.item(cliente, "values")
+        vehiculo = self.treeview.focus()
+        if vehiculo:
+            campos = self.treeview.item(vehiculo, "values")
             confirmar = askokcancel(
                 title="Confirmar borrado",
                 message=f"¿Borrar {campos[1]} {campos[2]}?",
                 icon=WARNING)
             if confirmar:
-                self.treeview.delete(cliente)
-                db.Clientes.borrar(campos[0])
+                self.treeview.delete(vehiculo)
+                db.Vehiculos.borrar(campos[0])
 
     def create(self):
-        CreateClientWindow(self)
+        CreateVehicleWindow(self)
 
     def edit(self):
         if self.treeview.focus():
-            EditClientWindow(self)
+            EditVehicleWindow(self)
 
 
 if __name__ == "__main__":
