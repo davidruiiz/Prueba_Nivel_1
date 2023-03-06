@@ -24,3 +24,9 @@ def bastidor_valido(bastidor, lista):
             print("número de bastidor utilizado por otro vehículo.")
             return False
     return True
+
+def ruedas_validas(ruedas):
+    if not ruedas.isdigit():
+        print("número de ruedas incorrecto, debe ser un número entero.")
+        return False
+    return True

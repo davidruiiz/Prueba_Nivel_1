@@ -20,7 +20,7 @@ class CenterWidgetMixin:
 class CreateVehicleWindow(Toplevel, CenterWidgetMixin):
     def __init__(self, parent):
         super().__init__(parent)
-        self.title("Crear cliente")
+        self.title("Crear vehículo")
         self.build()
         self.center()
         self.transient(parent)
@@ -31,8 +31,8 @@ class CreateVehicleWindow(Toplevel, CenterWidgetMixin):
         frame.pack(padx=20, pady=10)
 
         Label(frame, text="Número de Bastidor (2 ints y 1 upper char)").grid(row=0, column=0)
-        Label(frame, text="Color (de 2 a 30 chars)").grid(row=0, column=1)
-        Label(frame, text="Ruedas (de 2 a 30 chars)").grid(row=0, column=2)
+        Label(frame, text="Color (de 1 a 30 chars)").grid(row=0, column=1)
+        Label(frame, text="Ruedas").grid(row=0, column=2)
 
         bastidor = Entry(frame)
         bastidor.grid(row=1, column=0)
@@ -47,7 +47,7 @@ class CreateVehicleWindow(Toplevel, CenterWidgetMixin):
         frame = Frame(self)
         frame.pack(pady=10)
 
-        crear = Button(frame, text="Crear", command=self.create_client)
+        crear = Button(frame, text="Crear", command=self.create_vehicle)
         crear.configure(state=DISABLED)
         crear.grid(row=0, column=0)
         Button(frame, text="Cancelar", command=self.close).grid(row=0, column=1)
@@ -72,7 +72,7 @@ class CreateVehicleWindow(Toplevel, CenterWidgetMixin):
     def validate(self, event, index):
         valor = event.widget.get()
         valido = helpers.bastidor_valido(valor, db.Vehiculos.lista) if index == 0 \
-            else (valor.isalpha() and len(valor) >= 2 and len(valor) <= 30)
+            else (len(valor) >= 1 and len(valor) <= 30)
         event.widget.configure({"bg": "Green" if valido else "Red"})
         # Cambiar el estado del botón en base a las validaciones
         self.validaciones[index] = valido
@@ -82,7 +82,7 @@ class CreateVehicleWindow(Toplevel, CenterWidgetMixin):
 class EditVehicleWindow(Toplevel, CenterWidgetMixin):
     def __init__(self, parent):
         super().__init__(parent)
-        self.title("Actualizar cliente")
+        self.title("Actualizar vehículo")
         self.build()
         self.center()
         self.transient(parent)
@@ -93,8 +93,8 @@ class EditVehicleWindow(Toplevel, CenterWidgetMixin):
         frame.pack(padx=20, pady=10)
 
         Label(frame, text="Número de Bastidor").grid(row=0, column=0)
-        Label(frame, text="Color (de 2 a 30 chars)").grid(row=0, column=1)
-        Label(frame, text="Ruedas (de 2 a 30 chars)").grid(row=0, column=2)
+        Label(frame, text="Color (de 1 a 30 chars)").grid(row=0, column=1)
+        Label(frame, text="Ruedas").grid(row=0, column=2)
 
         bastidor = Entry(frame)
         bastidor.grid(row=1, column=0)
@@ -105,8 +105,8 @@ class EditVehicleWindow(Toplevel, CenterWidgetMixin):
         ruedas.grid(row=1, column=2)
         ruedas.bind("<KeyRelease>", lambda event: self.validate(event, 1))
 
-        cliente = self.master.treeview.focus()
-        campos = self.master.treeview.item(cliente, 'values')
+        vehiculo = self.master.treeview.focus()
+        campos = self.master.treeview.item(vehiculo, 'values')
         bastidor.insert(0, campos[0])
         bastidor.config(state=DISABLED)
         color.insert(0, campos[1])
@@ -115,7 +115,7 @@ class EditVehicleWindow(Toplevel, CenterWidgetMixin):
         frame = Frame(self)
         frame.pack(pady=10)
 
-        actualizar = Button(frame, text="Actualizar", command=self.edit_client)
+        actualizar = Button(frame, text="Actualizar", command=self.edit_vehicle)
         actualizar.grid(row=0, column=0)
         Button(frame, text="Cancelar", command=self.close).grid(row=0, column=1)
 
