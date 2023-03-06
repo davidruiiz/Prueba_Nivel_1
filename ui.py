@@ -138,7 +138,7 @@ class EditVehicleWindow(Toplevel, CenterWidgetMixin):
 
     def validate(self, event, index):
         valor = event.widget.get()
-        valido = (valor.isalpha() and len(valor) >= 2 and len(valor) <= 30)
+        valido = (len(valor) >= 1 and len(valor) <= 30)
         event.widget.configure({"bg": "Green" if valido else "Red"})
         # Cambiar el estado del botón en base a las validaciones
         self.validaciones[index] = valido
