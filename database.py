@@ -60,3 +60,5 @@ class Vehiculos:
             writer = csv.writer(fichero, delimiter=';')
             for vehiculo in Vehiculos.lista:
                 writer.writerow((vehiculo.bastidor, vehiculo.color, vehiculo.ruedas))
+
+

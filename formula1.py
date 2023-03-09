@@ -22,3 +22,4 @@ class Formula1(Coche):
             "cilindrada": self.cilindrada,
             "equipo": self.equipo
         }
+    
